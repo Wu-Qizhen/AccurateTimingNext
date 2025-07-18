@@ -1,0 +1,464 @@
+package com.wqz.accuratetimingnext.act.game
+
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wqz.accuratetimingnext.R
+import com.wqz.accuratetimingnext.act.game.util.Mode
+import com.wqz.accuratetimingnext.act.game.util.ModeTranslator
+import com.wqz.accuratetimingnext.database.entity.GameRecord
+import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
+import com.wqz.accuratetimingnext.ui.XBackground
+import com.wqz.accuratetimingnext.ui.XCard
+import com.wqz.accuratetimingnext.ui.XItem
+import com.wqz.accuratetimingnext.ui.XToast
+import com.wqz.accuratetimingnext.ui.color.BorderColor
+import com.wqz.accuratetimingnext.ui.color.ContentColor
+import com.wqz.accuratetimingnext.viewmodel.GameRecordViewModel
+import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
+import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
+
+/**
+ * 盲卡模式
+ * Created by Wu Qizhen on 2025.7.16
+ */
+@AndroidEntryPoint
+class BlindChallengeActivity : ComponentActivity() {
+    private var timeId: Int = -1
+    private var playerId = -1
+    private val playerViewModel: PlayerViewModel by viewModels()
+    private val timeViewModel: TimeViewModel by viewModels()
+    private val gameRecordViewModel: GameRecordViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            XBackground.BreathingBackground(
+                titleId = R.string.blind_challenge
+            ) {
+                CompositionLocalProvider(LocalLifecycleOwner provides this) {
+                    timeId = intent.getIntExtra("TIME_ID", -1)
+                    playerId = intent.getIntExtra("PLAYER_ID", -1)
+
+                    if (timeId == -1 || playerId == -1) {
+                        XToast.showText("加载失败")
+                        finish()
+                        return@CompositionLocalProvider
+                    }
+
+                    BlindChallengeScreen()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("UnrememberedMutableState")
+    @Composable
+    fun BlindChallengeScreen() {
+        // 秒表状态
+        var isRunning by remember { mutableStateOf(false) }
+        var accumulatedTime by remember { mutableLongStateOf(0L) }
+        var startTime by remember { mutableLongStateOf(0L) }
+
+        // 游戏状态
+        var currentTargetIndex by remember { mutableIntStateOf(0) }
+        var totalError by remember { mutableLongStateOf(0L) }
+        var gameFinished by remember { mutableStateOf(false) }
+        var recordSaved by remember { mutableStateOf(false) }
+        val actualTimes = remember { mutableListOf<Long>() }
+        val errorTimes = remember { mutableListOf<Long>() }
+
+        // 显示文本
+        val displayText by derivedStateOf {
+            when {
+                !isRunning && accumulatedTime == 0L -> "00.000"
+                isRunning -> "--.---"
+                else -> formatTime(accumulatedTime)
+            }
+        }
+
+        // 数据加载
+        LaunchedEffect(playerId, timeId) {
+            playerViewModel.getById(playerId)
+            timeViewModel.getById(timeId)
+        }
+        val player by playerViewModel.currentPlayer.collectAsStateWithLifecycle()
+        val time by timeViewModel.currentTime.collectAsStateWithLifecycle()
+        val expectedTimes: List<Long> = time?.expectedTimes ?: listOf(404L)
+
+        /*// 加载状态处理
+        if (player == null || time == null) {
+            // 显示加载状态
+            Image(
+                painter = painterResource(id = R.drawable.ic_no_data),
+                contentDescription = "无数据",
+                modifier = Modifier
+                    .size(100.dp)
+            )
+            return
+        }*/
+
+        // 控制逻辑
+        fun toggleRunning() {
+            if (isRunning) {
+                // 暂停：记录当前时间并累加
+                val currentTime = System.currentTimeMillis()
+                accumulatedTime += (currentTime - startTime)
+                isRunning = false
+
+                // 计算误差
+                actualTimes.add(accumulatedTime)
+                val error = abs(accumulatedTime - expectedTimes[currentTargetIndex])
+                totalError += error
+                errorTimes.add(error)
+                XToast.showText("误差：${error} MS")
+
+                // 移动到下一个时间点
+                if (currentTargetIndex < expectedTimes.size - 1) {
+                    currentTargetIndex++
+                } else {
+                    // 所有时间点已完成
+                    gameFinished = true
+                }
+            } else {
+                // 开始/继续：记录开始时间
+                startTime = System.currentTimeMillis()
+                isRunning = true
+            }
+        }
+
+        fun resetGame() {
+            isRunning = false
+            accumulatedTime = 0L
+            currentTargetIndex = 0
+            totalError = 0L
+            actualTimes.clear()
+            errorTimes.clear()
+            gameFinished = false
+            recordSaved = false
+        }
+
+        /*// 处理暂停事件（计算误差）
+        LaunchedEffect(timerState) {
+            if (timerState == TimerState.PAUSED) {
+                // 计算当前误差（实际时间 - 目标时间）
+                actualTimes.add(currentTime)
+                val error = abs(currentTime - expectedTimes[currentTargetIndex])
+                totalError += error
+                errorTimes.add(error)  // 存储单个误差
+                XToast.showText("误差：${error} MS")
+
+                // 移动到下一个时间点
+                if (currentTargetIndex < expectedTimes.size - 1) {
+                    currentTargetIndex++
+                } else {
+                    // 所有时间点已完成
+                    gameFinished = true
+                }
+            }
+        }*/
+
+        // 游戏结束时保存记录
+        LaunchedEffect(gameFinished) {
+            if (gameFinished && !recordSaved && player != null && time != null) {
+                // 确保有足够的数据
+                if (actualTimes.size == expectedTimes.size && errorTimes.size == expectedTimes.size) {
+                    val index = expectedTimes.size - 4
+
+                    player?.let { currentPlayer ->
+                        // 计算平均误差（安全处理除零情况）
+                        // val averageError = if (actualTimes.isNotEmpty()) totalError / actualTimes.size else 0L
+                        val averageError = totalError / actualTimes.size
+
+                        // 创建数组的副本（避免修改原始引用）
+                        val bestRecords = currentPlayer.bestRecords.copyOf()
+                        val maximumAverageErrors = currentPlayer.maximumAverageErrors.copyOf()
+                        val minimumAverageErrors = currentPlayer.minimumAverageErrors.copyOf()
+
+                        // 更新 bestRecords：如果当前值为 -1，直接更新；否则仅当 totalError 更优时更新
+                        if (index in bestRecords.indices) {
+                            if (bestRecords[index] == -1 || totalError < bestRecords[index]) {
+                                bestRecords[index] = totalError.toInt()
+                            }
+                        }
+
+                        // 更新 maximumAverageErrors：如果当前值为 -1，直接更新；否则仅当 averageError 更大时更新
+                        if (index in maximumAverageErrors.indices) {
+                            if (maximumAverageErrors[index] == -1 || averageError > maximumAverageErrors[index]) {
+                                maximumAverageErrors[index] = averageError.toInt()
+                            }
+                        }
+
+                        // 更新 minimumAverageErrors：如果当前值为 -1，直接更新；否则仅当 averageError 更小时更新
+                        if (index in minimumAverageErrors.indices) {
+                            if (minimumAverageErrors[index] == -1 || averageError < minimumAverageErrors[index]) {
+                                minimumAverageErrors[index] = averageError.toInt()
+                            }
+                        }
+
+                        // 更新玩家数据
+                        playerViewModel.update(
+                            currentPlayer.copy(
+                                numberOfCompetitions = currentPlayer.numberOfCompetitions + 1,
+                                accumulationNumber = currentPlayer.accumulationNumber + actualTimes.size,
+                                accumulationError = currentPlayer.accumulationError + totalError,
+                                accumulationTime = currentPlayer.accumulationTime + actualTimes.last(),
+                                bestRecords = bestRecords,
+                                maximumAverageErrors = maximumAverageErrors,
+                                minimumAverageErrors = minimumAverageErrors
+                            )
+                        )
+                    } ?: run {
+                        XToast.showText("加载失败")
+                    }
+
+                    gameRecordViewModel.insert(
+                        gameRecord = GameRecord(
+                            playerId = playerId,
+                            playerName = player!!.playerName,
+                            timeId = timeId,
+                            timeName = time!!.timeName,
+                            expectedTimes = expectedTimes,
+                            actualTimes = actualTimes,
+                            errorTimes = errorTimes,
+                            totalError = totalError,
+                            gameTimestamp = System.currentTimeMillis(),
+                            gameRound = player!!.numberOfCompetitions,
+                            gameTag = ModeTranslator.getChineseName(mode = Mode.RACING_MODE)
+                        )
+                    )
+                    XToast.showText("记录已保存")
+                    recordSaved = true
+                } else {
+                    XToast.showText("保存失败：数据不完整")
+                }
+            }
+        }
+
+        // 加载状态处理
+        if (player == null || time == null) {
+            // 显示加载状态
+            Image(
+                painter = painterResource(id = R.drawable.ic_no_data),
+                contentDescription = "无数据",
+                modifier = Modifier
+                    .size(100.dp)
+            )
+            return
+        }
+
+        XCard.LivelyCard {
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = if (!gameFinished) {
+                    "下一个目标：${expectedTimes[currentTargetIndex].toFloat().div(1000)}S"
+                } else {
+                    "游戏完成！"
+                },
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 0.5f.dp,
+                color = BorderColor.DEFAULT_GRAY
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                // 时间显示
+                Text(
+                    text = displayText,
+                    fontSize = 50.sp,
+                    fontFamily = FontFamily(Font(R.font.digital_mono, FontWeight.Bold)),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                // 控制按钮
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    XItem.Button(text = "重置", enabled = !isRunning && accumulatedTime > 0) {
+                        resetGame()
+                    }
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    XItem.Button(
+                        text = if (isRunning) "暂停" else "开始",
+                        enabled = !gameFinished
+                    ) {
+                        toggleRunning()
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 0.5f.dp,
+                color = BorderColor.DEFAULT_GRAY
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = "总误差：${totalError} MS",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (totalError < 500) ContentColor.DEFAULT_GREEN else ContentColor.DEFAULT_RED,
+                modifier = Modifier.clickVfx {
+                    val intent =
+                        Intent(this@BlindChallengeActivity, ErrorDetailsActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putLongArray("EXPECTED_TIMES", expectedTimes.toLongArray())
+                    bundle.putLongArray("ACTUAL_TIMES", actualTimes.toLongArray())
+                    bundle.putInt("PLAYER_ID", playerId)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+        Spacer(modifier = Modifier.height(50.dp))
+    }
+
+    /*@SuppressLint("UnrememberedMutableState")
+    @Composable
+    fun BlindStopwatch(
+        startButtonEnabled: Boolean = true // 新增开始按钮启用状态
+    ) {
+        // 状态管理
+        var isRunning by remember { mutableStateOf(false) }
+        var startTime by remember { mutableStateOf(0L) }
+        var accumulatedTime by remember { mutableStateOf(0L) }
+        var lastPausedTime by remember { mutableStateOf(0L) }
+
+        // 显示文本
+        val displayText by derivedStateOf {
+            when {
+                !isRunning && accumulatedTime == 0L -> "00.000"
+                isRunning -> "--.---"
+                else -> formatTime(accumulatedTime)
+            }
+        }
+
+        // 控制逻辑
+        fun toggleRunning() {
+            if (isRunning) {
+                // 暂停：记录当前时间并累加
+                lastPausedTime = System.currentTimeMillis()
+                accumulatedTime += (lastPausedTime - startTime)
+                isRunning = false
+            } else {
+                // 开始/继续：记录开始时间
+                startTime = System.currentTimeMillis()
+                isRunning = true
+            }
+        }
+
+        fun reset() {
+            accumulatedTime = 0L
+            lastPausedTime = 0L
+            isRunning = false
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // 时间显示
+            Text(
+                text = displayText,
+                fontSize = 50.sp,
+                fontFamily = FontFamily(Font(R.font.digital_mono, FontWeight.Bold)),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // 控制按钮
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                XItem.Button(text = "重置", enabled = !isRunning && accumulatedTime > 0) {
+                    reset()
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                XItem.Button(
+                    text = if (isRunning) "暂停" else "开始",
+                    enabled = startButtonEnabled
+                ) {
+                    toggleRunning()
+                }
+            }
+        }
+    }*/
+
+    // 格式化时间 (ss.SSS)
+    @SuppressLint("DefaultLocale")
+    fun formatTime(millis: Long): String {
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
+        val millisPart = millis % 1000
+
+        return String.format("%02d.%03d", seconds, millisPart)
+    }
+}

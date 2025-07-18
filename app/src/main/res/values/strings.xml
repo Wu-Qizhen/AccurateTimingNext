@@ -1,0 +1,109 @@
+<resources>
+    <!-- 应用信息 -->
+    <string name="app_name">精准时刻</string>
+    <string name="slogan">卡时间，刷纪录</string>
+    <string name="copyright">Copyright © 2025 Code IntelliX.\nAll rights reserved.</string>
+    <string name="powered_by">Powered by\nAethex Matrix ®</string>
+    <string name="studio">Code IntelliX</string>
+
+    <!-- 关于我们 -->
+    <string name="about_us">关于我们</string>
+    <string name="introduction">一个考验时间掌控的小游戏</string>
+
+    <string name="version">Acumen（A）</string>
+    <string name="version_desc">版本号</string>
+    <string name="update_log">更新日志</string>
+
+    <string name="aethex_matrix">Aethex Matrix</string>
+    <string name="framework">Powered by</string>
+
+    <string name="participating_team">参与团队</string>
+    <string name="studio_desc">设计 | 开发</string>
+    <string name="about_studio">组织详情</string>
+    <string name="text_studio_describe">一个热爱开发和设计的小小工作室\n\nEvery Moment Worth Creating, \nEverywhere
+        Filled with Creativity.\n\n每一刻都值得创造，\n每一处都充满创意。
+    </string>
+    <string name="dept_dev">开发部</string>
+    <string name="dept_design">设计部</string>
+    <string name="dept_create">创作部</string>
+
+    <string name="participating_individuals">参与成员</string>
+    <string name="wqz">Wu Qizhen</string>
+    <string name="wqz_desc">开发者 | 项目发起人</string>
+    <string name="chatglm">智谱清言</string>
+    <string name="chatglm_desc">技术协力</string>
+    <string name="tylm">通义灵码</string>
+    <string name="tylm_desc">开发协力</string>
+    <string name="codegeex">CodeGeeX</string>
+    <string name="codegeex_desc">开发协力</string>
+    <string name="deepseek">深度求索</string>
+    <string name="deepseek_desc">开发协力</string>
+    <string name="sd">Stable Diffusion</string>
+    <string name="sd_desc">设计协力</string>
+    <string name="about_developer">关于此成员</string>
+    <string name="text_about_wqz">
+        本项目开发和项目发起人，负责项目的整体规划和执行，领导团队进行软件开发工作，并推动项目从概念到实现的整个过程。
+    </string>
+    <string name="text_about_codegeex">
+        CodeGeeX 是由清华大学开发的一款多语言代码生成预训练模型，具有 130 亿参数，支持 Python、Java 等多种编程语言，能够实现高精度代码生成和跨语言代码翻译，已通过 VSCode 插件形式提供给广大开发者使用，大幅提升编程效率。
+    </string>
+    <string name="text_about_tylm">
+        通义灵码是一款基于阿里云通义代码大模型打造的智能编码助手，基于海量优秀开源代码数据集和编程教科书训练，可根据当前代码文件及跨文件的上下文，自动生成行级
+        / 函数级代码、单元测试、代码注释等，此外还具备代码解释、智能研发问答、异常报错排查等能力，并针对阿里云 SDK/OpenAPI
+        使用场景调优，为开发者带来高效、流畅的编码体验。
+    </string>
+    <string name="text_about_chatglm">
+        智谱清言是一款专注于语音识别和自然语言处理技术的智能语音助手。它能够准确识别用户的语音指令，并理解其中的意图，从而提供高效、便捷的交互体验。智谱清言应用场景广泛，包括但不限于智能家居控制、语音助手服务、客服机器人等，旨在通过先进的语音交互技术，提升人机沟通的便捷性和自然性。
+    </string>
+    <string name="text_about_deepseek">
+        DeepSeek 是由中国深度求索公司开发的人工智能大模型，专注于文本创作、自然语言理解、编程辅助等任务，具备开源、低成本和高性能的特点。‌其最新版本在数学推理、代码生成等任务上达到国际领先水平，广泛应用于金融、政务、教育等领域。
+    </string>
+    <string name="text_about_sd">
+        Stable Diffusion 是一个开源的文本到图像生成模型，由 Stability AI 开发。它能根据文本描述生成高分辨率的图像，具有快速、稳定的特点，广泛应用于艺术创作、设计等领域，并受到广泛的社区支持。该模型的发布显著降低了高质量图像生成的门槛。
+    </string>
+
+    <!-- 主页 -->
+    <string name="grade_easy">简单</string>
+    <string name="recording_mode">竞速记录模式</string>
+    <string name="practice_mode">经典练习模式</string>
+    <string name="grade_hard">困难</string>
+    <string name="blind_challenge">盲卡挑战模式</string>
+    <string name="memory_challenge">记忆挑战模式</string>
+    <string name="reverse_challenge">反向挑战模式</string>
+    <string name="grade_expert">高手</string>
+    <string name="disordered_memory_challenge">乱序记忆模式</string>
+    <string name="computational_challenge">计算挑战模式</string>
+    <string name="grade_endless">无尽</string>
+    <string name="rhythm_challenge">节奏挑战模式</string>
+    <string name="option">选项</string>
+    <string name="ranking_list">排行榜</string>
+    <string name="game_record">游戏记录</string>
+    <string name="settings">设置</string>
+
+    <!-- 时间管理 -->
+    <string name="time_rules">\u0020- 每个时间占一行，至少 4 个时间，上限 10 个时间，超过 10 行的数据无效
+        \n - 当输入小数时，时间的单位为秒，输入整数时，时间的单位为毫秒
+        \n - 至多精确到 0.001 秒，且范围在 (0, 99] 秒之间
+        \n - 随机个数可空、可填范围在 0 ∪ [4, 10] 的数字，当填 0 时，则随机时间个数随机生成时间
+        \n - 随机模式下，生成的时间在 30 秒之内</string>
+
+    <!-- 玩家管理 -->
+    <string name="player_rules">\u0020- 玩家名必须符合我国法律法规，不得包含暴力、色情、赌博等不良信息
+        \n - 玩家名长度限制在 20 个字符之间，可以包含字母、数字、下划线、汉字等
+        \n - 玩家名不得使用特殊符号，如：%、^、*、$、#、@ 等
+        \n - 玩家名可以自由组合，但建议选择一个具有个性、易于记忆的名字</string>
+
+    <!-- 设置 -->
+    <string name="about">关于</string>
+    <string name="homepage_gird_layout">设置主页为网格布局</string>
+    <string name="gird_layout">网格布局</string>
+
+    <!-- 通用 -->
+    <string name="add">添加</string>
+    <string name="added">添加成功</string>
+    <string name="delete">删除</string>
+    <string name="deleted">删除成功</string>
+    <string name="save">保存</string>
+    <string name="accumulation">积累</string>
+    <string name="strength">实力</string>
+</resources>
