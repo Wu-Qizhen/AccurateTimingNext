@@ -136,7 +136,7 @@ class ErrorDetailsActivity : ComponentActivity() {
                 Row(
                     modifier = Modifier
                         // .fillMaxWidth()
-                        .padding(10.dp),
+                        .padding(start = 10.dp, top = 10.dp, end = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -164,6 +164,8 @@ class ErrorDetailsActivity : ComponentActivity() {
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
         Spacer(modifier = Modifier.height(50.dp))

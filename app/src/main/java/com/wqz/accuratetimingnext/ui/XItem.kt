@@ -65,6 +65,44 @@ object XItem {
     private val BORDER_WIDTH = BorderWidth.DEFAULT_WIDTH
 
     /**
+     * 圆按钮
+     * @param text 按钮文字
+     * @param onClick 点击事件
+     */
+    @Composable
+    fun Round(
+        text: String,
+        enabled: Boolean = true,
+        onClick: () -> Unit
+    ) {
+        val interactionSource = remember { MutableInteractionSource() }
+        val isPressed = interactionSource.collectIsPressedAsState()
+        val backgroundColor =
+            if (enabled) {
+                if (isPressed.value) BACKGROUND_PRESSED_THEME_RED else BACKGROUND_DEFAULT_THEME_RED
+            } else {
+                Color.DarkGray
+            }
+
+        Box(
+            modifier = Modifier
+                .clickVfx(interactionSource, enabled, onClick)
+                .size(40.dp)
+                // .padding(10.dp)
+                .background(backgroundColor, CircleShape)
+        ) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                text = text.take(1),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (enabled) Color.White else Color.LightGray
+            )
+        }
+    }
+
+    /**
      * 文本按钮
      * @param text 按钮文字
      * @param onClick 点击事件

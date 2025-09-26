@@ -10,16 +10,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -37,15 +33,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.ui.theme.AccurateTimingTheme
 import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import kotlinx.coroutines.delay
@@ -66,16 +58,63 @@ object XBackground {
     @Composable
     fun CirclesBackground(content: @Composable () -> Unit) {
         AccurateTimingTheme {
-            var bottomWidth by remember { mutableStateOf(0.dp) }
-            var topWidth by remember { mutableStateOf(0.dp) }
+            // var bottomWidth by remember { mutableStateOf(0.dp) }
+            // var topWidth by remember { mutableStateOf(0.dp) }
             val localDensity = LocalDensity.current
+            val ambientAlpha = 0.6f
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black)
             ) {
-                Row(
+                var circleHeight by remember {
+                    mutableStateOf(0.dp)
+                }
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .offset(y = circleHeight * 0.5f, x = circleHeight * -0.5f)
+                        .fillMaxWidth()
+                        .scale(scaleX = 1.1f, scaleY = 1.1f)
+                        .aspectRatio(1f)
+                        .alpha(ambientAlpha * 0.9f)
+                        .background(
+                            shape = CircleShape, brush = Brush.radialGradient(
+                                listOf(
+                                    ThemeColor,
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                        .onSizeChanged {
+                            circleHeight = with(localDensity) { it.height.toDp() }
+                        }
+                )
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(y = circleHeight * -0.5f, x = circleHeight * 0.5f)
+                        .fillMaxWidth()
+                        .scale(scaleX = 1.1f, scaleY = 1.1f)
+                        .aspectRatio(1f)
+                        .alpha(ambientAlpha * 0.9f)
+                        .background(
+                            shape = CircleShape, brush = Brush.radialGradient(
+                                listOf(
+                                    ThemeColor,
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                        .onSizeChanged {
+                            circleHeight = with(localDensity) { it.height.toDp() }
+                        }
+                )
+
+                /*Row(
                     Modifier
                         .align(Alignment.BottomStart)
                         .fillMaxSize()
@@ -95,9 +134,9 @@ object XBackground {
                     )
 
                     Spacer(Modifier.weight(50f))
-                }
+                }*/
 
-                Row(
+                /*Row(
                     Modifier
                         .align(Alignment.TopEnd)
                         .fillMaxSize()
@@ -117,14 +156,14 @@ object XBackground {
                             },
                         contentScale = ContentScale.Fit
                     )
-                }
+                }*/
 
-                Column(
+                /*Column(
                     Modifier
                         .fillMaxSize()
-                ) {
-                    content()
-                }
+                ) {*/
+                content()
+                /*}*/
             }
         }
     }

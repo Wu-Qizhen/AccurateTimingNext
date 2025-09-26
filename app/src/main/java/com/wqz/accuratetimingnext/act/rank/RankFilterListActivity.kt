@@ -112,7 +112,7 @@ class RankFilterListActivity : ComponentActivity() {
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .width(110.dp)
+                    // .width(110.dp)
                     .clickVfx {
                         showFilter = !showFilter
                     },
@@ -152,21 +152,18 @@ class RankFilterListActivity : ComponentActivity() {
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        XItem.Button(text = "4") {
+                        XItem.Round(text = "4") {
                             currentNumber = 4
                             showFilter = false
                         }
 
-                        Spacer(modifier = Modifier.width(10.dp))
-
-                        XItem.Button(text = "5") {
+                        XItem.Round(text = "5") {
                             currentNumber = 5
                             showFilter = false
                         }
 
-                        Spacer(modifier = Modifier.width(10.dp))
 
-                        XItem.Button(text = "6") {
+                        XItem.Round(text = "6") {
                             currentNumber = 6
                             showFilter = false
                         }
@@ -179,21 +176,17 @@ class RankFilterListActivity : ComponentActivity() {
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        XItem.Button(text = "7") {
+                        XItem.Round(text = "7") {
                             currentNumber = 7
                             showFilter = false
                         }
 
-                        Spacer(modifier = Modifier.width(10.dp))
-
-                        XItem.Button(text = "8") {
+                        XItem.Round(text = "8") {
                             currentNumber = 8
                             showFilter = false
                         }
 
-                        Spacer(modifier = Modifier.width(10.dp))
-
-                        XItem.Button(text = "9") {
+                        XItem.Round(text = "9") {
                             currentNumber = 9
                             showFilter = false
                         }
@@ -206,7 +199,7 @@ class RankFilterListActivity : ComponentActivity() {
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        XItem.Button(text = "10") {
+                        XItem.Round(text = "10") {
                             currentNumber = 10
                             showFilter = false
                         }
