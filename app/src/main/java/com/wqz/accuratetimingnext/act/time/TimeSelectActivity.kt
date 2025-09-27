@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,15 +41,14 @@ import com.wqz.accuratetimingnext.act.game.ClassicPracticeActivity
 import com.wqz.accuratetimingnext.act.game.util.Mode
 import com.wqz.accuratetimingnext.act.player.PlayerSelectActivity
 import com.wqz.accuratetimingnext.act.time.util.RandomUniqueTimeGenerator
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.database.entity.Time
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,7 +68,7 @@ class TimeSelectActivity : ComponentActivity() {
         mode = if (mode == "") Mode.PRACTICE_MODE.name else mode
 
         setContent {
-            XBackground.BreathingBackground(title = "选择时间") {
+            XBackground.Breathing(title = "选择时间") {
                 TimeSelectScreen()
             }
         }
@@ -122,19 +120,14 @@ class TimeSelectActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     times.forEach {
                         key(it.id) {
                             TimeItem(
                                 time = it
                             )
                             if (it != times.last()) {
-                                HorizontalDivider(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    thickness = BorderWidth.DEFAULT_WIDTH,
-                                    color = BorderColor.DEFAULT_GRAY
-                                )
+                                XDivider.Horizontal()
                             }
                         }
                     }
@@ -209,7 +202,7 @@ class TimeSelectActivity : ComponentActivity() {
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .background(
-                                    color = ThemeColor,
+                                    color = XThemeColor.NORMAL,
                                     shape = RoundedCornerShape(20.dp)
                                 )
                                 .padding(horizontal = 10.dp)

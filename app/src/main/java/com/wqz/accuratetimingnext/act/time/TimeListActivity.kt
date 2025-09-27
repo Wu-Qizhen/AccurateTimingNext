@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,14 +37,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
 import com.wqz.accuratetimingnext.database.entity.Time
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,7 +59,7 @@ class TimeListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(title = "时间管理") {
+            XBackground.Breathing(title = "时间管理") {
                 TimeListScreen()
             }
         }
@@ -92,19 +90,14 @@ class TimeListActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     times.forEach {
                         key(it.id) {
                             TimeItem(
                                 time = it
                             )
                             if (it != times.last()) {
-                                HorizontalDivider(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    thickness = BorderWidth.DEFAULT_WIDTH,
-                                    color = BorderColor.DEFAULT_GRAY
-                                )
+                                XDivider.Horizontal()
                             }
                         }
                     }
@@ -171,7 +164,7 @@ class TimeListActivity : ComponentActivity() {
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .background(
-                                    color = ThemeColor,
+                                    color = XThemeColor.NORMAL,
                                     shape = RoundedCornerShape(20.dp)
                                 )
                                 .padding(horizontal = 10.dp)

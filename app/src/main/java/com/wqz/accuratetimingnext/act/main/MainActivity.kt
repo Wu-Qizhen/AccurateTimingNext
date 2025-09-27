@@ -63,12 +63,12 @@ import com.wqz.accuratetimingnext.act.rank.RankSelectActivity
 import com.wqz.accuratetimingnext.act.record.RecordListActivity
 import com.wqz.accuratetimingnext.act.setting.SettingActivity
 import com.wqz.accuratetimingnext.act.time.TimeSelectActivity
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBar
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.preference.LayoutPreferencesManager
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XBar
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
 import kotlinx.coroutines.delay
 
 /**
@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
         preferencesManager = LayoutPreferencesManager(this)
 
         setContent {
-            XBackground.BreathingBackground(isBreathing = isBreathing.value) {
+            XBackground.Breathing(isBreathing = isBreathing.value) {
                 LaunchAnimation(
                     isGirdLayout = preferencesManager.isGridLayout(),
                     // 添加回调用于停止呼吸
@@ -267,7 +267,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 if (!isGirdLayout) {
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_easy,
                         textId = R.string.grade_easy
                     )
@@ -296,7 +296,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_hard,
                         textId = R.string.grade_hard
                     )
@@ -336,7 +336,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_expert,
                         textId = R.string.grade_expert
                     )
@@ -365,7 +365,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_endless,
                         textId = R.string.grade_endless
                     )
@@ -381,7 +381,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(iconId = R.drawable.ic_option, textId = R.string.option)
+                    XBar.Classification(iconId = R.drawable.ic_option, textId = R.string.option)
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -410,7 +410,7 @@ class MainActivity : ComponentActivity() {
                         startActivity(Intent(context, SettingActivity::class.java))
                     }
                 } else {
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_easy,
                         textId = R.string.grade_easy
                     )
@@ -444,7 +444,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_hard,
                         textId = R.string.grade_hard
                     )
@@ -501,7 +501,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_expert,
                         textId = R.string.grade_expert
                     )
@@ -535,7 +535,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(
+                    XBar.Classification(
                         iconId = R.drawable.ic_grade_endless,
                         textId = R.string.grade_endless
                     )
@@ -563,7 +563,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XBar.ClassificationBar(iconId = R.drawable.ic_option, textId = R.string.option)
+                    XBar.Classification(iconId = R.drawable.ic_option, textId = R.string.option)
 
                     Spacer(modifier = Modifier.height(10.dp))
 

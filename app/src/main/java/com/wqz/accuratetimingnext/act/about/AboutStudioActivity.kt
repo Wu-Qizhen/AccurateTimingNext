@@ -35,9 +35,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XTitleBar
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBar
 
 /**
  * 关于组织
@@ -48,7 +48,7 @@ class AboutStudioActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
         setContent {
-            XBackground.BreathingBackground {
+            XBackground.Breathing{
                 AboutStudioScreen()
             }
         }
@@ -73,7 +73,7 @@ class AboutStudioActivity : ComponentActivity() {
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.Top,
         ) {
-            XTitleBar.TextTitleBar(title = R.string.about_studio)
+            XBar.Text(title = R.string.about_studio)
 
             Image(
                 painter = painterResource(id = R.drawable.logo_code_intellix_poster),

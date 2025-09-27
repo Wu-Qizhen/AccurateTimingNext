@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -42,15 +41,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.time.util.TimeFormat.formatMilliseconds
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.TextFieldColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.property.ButtonCategory
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XButtonColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XTextFieldColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,7 +66,7 @@ class TimeDetailsActivity : ComponentActivity() {
         val timeId = intent.getIntExtra("TIME_ID", -1)
 
         setContent {
-            XBackground.BreathingBackground(title = "时间详情") {
+            XBackground.Breathing(title = "时间详情") {
                 TimeDetailsScreen(
                     timeId = timeId
                 )
@@ -138,12 +136,12 @@ class TimeDetailsActivity : ComponentActivity() {
                 // val times by remember { mutableStateOf(time!!.expectedTimes.toString()) }
                 var deleteConfirm by remember { mutableIntStateOf(0) }
 
-                XCard.LivelyCard {
+                XCard.Lively {
                     TextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = timeName,
                         onValueChange = { timeName = it },
-                        colors = TextFieldColor.colors(),
+                        colors = XTextFieldColor.textFieldSurface(),
                         textStyle = TextStyle(
                             color = Color.White,
                             fontSize = 16.sp,
@@ -158,10 +156,7 @@ class TimeDetailsActivity : ComponentActivity() {
                         maxLines = 1
                     )
 
-                    HorizontalDivider(
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
+                    XDivider.Horizontal()
 
                     // Spacer(modifier = Modifier.height(10.dp))
 
@@ -187,7 +182,7 @@ class TimeDetailsActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .width(25.dp)
                                             .background(
-                                                color = ThemeColor,
+                                                color = XThemeColor.NORMAL,
                                                 shape = RoundedCornerShape(20.dp)
                                             )
                                     ) {
@@ -211,10 +206,7 @@ class TimeDetailsActivity : ComponentActivity() {
 
                     // Spacer(modifier = Modifier.height(10.dp))
 
-                    HorizontalDivider(
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
+                    XDivider.Horizontal()
 
                     Row(
                         modifier = Modifier
@@ -231,7 +223,7 @@ class TimeDetailsActivity : ComponentActivity() {
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .background(
-                                    color = ThemeColor,
+                                    color = XThemeColor.NORMAL,
                                     shape = RoundedCornerShape(20.dp)
                                 )
                                 .padding(horizontal = 10.dp)
@@ -257,7 +249,7 @@ class TimeDetailsActivity : ComponentActivity() {
                     XItem.Button(
                         icon = R.drawable.ic_delete,
                         text = stringResource(id = R.string.delete),
-                        color = ButtonCategory.WARNING_BUTTON
+                        color = XButtonColor.WARNING
                     ) {
                         deleteConfirm++
                         if (deleteConfirm > 2) {
@@ -277,7 +269,7 @@ class TimeDetailsActivity : ComponentActivity() {
                     XItem.Button(
                         icon = R.drawable.ic_confirm,
                         text = stringResource(id = R.string.save),
-                        color = ButtonCategory.SAFE_BUTTON
+                        color = XButtonColor.SAFE
                     ) {
                         val title = timeName.trim().replace("\n", "")
                         // val expectedTimes = parseAndConvertTimes(times)

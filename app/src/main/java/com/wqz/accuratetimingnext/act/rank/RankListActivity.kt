@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,10 +29,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.rank.ui.RankItem
 import com.wqz.accuratetimingnext.act.rank.util.Sort
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,7 +51,7 @@ class RankListActivity : ComponentActivity() {
         sort = if (sort == "") Sort.NUMBER_OF_GAME.name else sort
 
         setContent {
-            XBackground.BreathingBackground(titleId = R.string.ranking_list) {
+            XBackground.Breathing(titleId = R.string.ranking_list) {
                 RankListScreen()
             }
         }
@@ -74,7 +72,7 @@ class RankListActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     Box(
                         modifier = Modifier
                             .wrapContentHeight()
@@ -122,12 +120,7 @@ class RankListActivity : ComponentActivity() {
                         )
                     }
 
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
+                    XDivider.Horizontal()
 
                     players.sortedByDescending { player ->
                         when (sort) {
@@ -154,12 +147,7 @@ class RankListActivity : ComponentActivity() {
                                 )
 
                                 if (player != players.last()) {
-                                    HorizontalDivider(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        thickness = BorderWidth.DEFAULT_WIDTH,
-                                        color = BorderColor.DEFAULT_GRAY
-                                    )
+                                    XDivider.Horizontal()
                                 }
                             }
                         }

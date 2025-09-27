@@ -17,10 +17,10 @@ import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.about.AboutAppActivity
 import com.wqz.accuratetimingnext.act.player.PlayerListActivity
 import com.wqz.accuratetimingnext.act.time.TimeListActivity
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.preference.LayoutPreferencesManager
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
 
 /**
  * 设置
@@ -31,7 +31,7 @@ class SettingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(titleId = R.string.settings) {
+            XBackground.Breathing(titleId = R.string.settings) {
                 SettingScreen()
             }
         }

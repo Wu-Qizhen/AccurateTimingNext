@@ -21,9 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.rank.util.Sort
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XBar
-import com.wqz.accuratetimingnext.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBar
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
 
 /**
  * 排行榜
@@ -34,7 +34,7 @@ class RankSelectActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(titleId = R.string.ranking_list) {
+            XBackground.Breathing(titleId = R.string.ranking_list) {
                 RankSelectScreen()
             }
         }
@@ -42,7 +42,7 @@ class RankSelectActivity : ComponentActivity() {
 
     @Composable
     fun RankSelectScreen() {
-        XBar.ClassificationBar(iconId = R.drawable.ic_accumulation, textId = R.string.accumulation)
+        XBar.Classification(iconId = R.drawable.ic_accumulation, textId = R.string.accumulation)
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -100,7 +100,7 @@ class RankSelectActivity : ComponentActivity() {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        XBar.ClassificationBar(iconId = R.drawable.ic_strength, textId = R.string.strength)
+        XBar.Classification(iconId = R.drawable.ic_strength, textId = R.string.strength)
 
         Spacer(modifier = Modifier.height(10.dp))
 

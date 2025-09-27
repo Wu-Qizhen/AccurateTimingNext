@@ -32,18 +32,19 @@ import com.wqz.accuratetimingnext.act.game.ai.IntelligentTimingAI
 import com.wqz.accuratetimingnext.act.game.ui.StopWatchComponent
 import com.wqz.accuratetimingnext.act.game.viewmodel.StopWatchViewModel
 import com.wqz.accuratetimingnext.act.game.viewmodel.TimerState
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.ContentColor
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XBorderColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XContentColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import kotlin.math.abs
 
 /**
  * 经典模式
  * Created by Wu Qizhen on 2025.7.15
- * Updated by Wu Qizhen on 2025.9.25
+ * Updated by Wu Qizhen on 2025.9.5
  */
 class ClassicPracticeActivity : ComponentActivity() {
     private val aiPlayer = IntelligentTimingAI()
@@ -52,7 +53,7 @@ class ClassicPracticeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(
+            XBackground.Breathing(
                 titleId = R.string.practice_mode
             ) {
                 CompositionLocalProvider(LocalLifecycleOwner provides this) {
@@ -62,7 +63,8 @@ class ClassicPracticeActivity : ComponentActivity() {
 
                     ClassicPracticeScreen(
                         viewModel = viewModel,
-                        expectedTimes = expectedTimes
+                        expectedTimes = expectedTimes,
+                        aiPlayer = aiPlayer
                     )
                 }
             }
@@ -72,7 +74,8 @@ class ClassicPracticeActivity : ComponentActivity() {
     @Composable
     fun ClassicPracticeScreen(
         viewModel: StopWatchViewModel,
-        expectedTimes: List<Long>
+        expectedTimes: List<Long>,
+        aiPlayer: IntelligentTimingAI
     ) {
         // 当前目标时间点索引
         var currentTargetIndex by remember { mutableIntStateOf(0) }
@@ -91,12 +94,15 @@ class ClassicPracticeActivity : ComponentActivity() {
         // 当前轮次结果
         var currentRoundResult by remember { mutableStateOf("") }
 
+        // AI 的点击时间预测
+        var aiPredictedTiming by remember { mutableLongStateOf(0L) }
+
         // 收集状态
         val timerState by viewModel.timerState.collectAsStateWithLifecycle()
         val currentTime by viewModel.currentTimeMillis.collectAsStateWithLifecycle()
         val displayText by viewModel.stopWatchText.collectAsStateWithLifecycle()
 
-        // AI 对战逻辑
+        /*// AI 对战逻辑
         LaunchedEffect(timerState, currentTargetIndex) {
             if (timerState == TimerState.RUNNING && !gameFinished) {
                 val targetTime = expectedTimes[currentTargetIndex]
@@ -111,8 +117,64 @@ class ClassicPracticeActivity : ComponentActivity() {
                     aiTotalError += aiError
 
                     // 立即显示 AI 结果
-                    currentRoundResult = "AI 已完成，误差: $aiError MS"
+                    currentRoundResult = "AI 已完成，误差：$aiError MS"
                 }
+            }
+        }*/
+
+        /*// AI 对战逻辑增强
+        LaunchedEffect(timerState, currentTargetIndex, currentTime) {
+            if (timerState == TimerState.RUNNING && !gameFinished) {
+                val targetTime = expectedTimes[currentTargetIndex]
+
+                // AI 智能计算时机
+                val aiTiming = aiPlayer.calculateAITiming(targetTime, currentTime)
+
+                // 模拟 AI 点击（在实际时间到达时记录）
+
+                    aiActualTimes.add(currentTime)
+                    val aiError = abs(currentTime - targetTime)
+                    aiTotalError += aiError
+
+                    // 显示 AI 结果
+                    currentRoundResult = "AI 已完成，误差：$aiError MS"
+                    // AI 学习
+                    aiPlayer.learnFromRound(targetTime, currentTime, currentTime)
+
+            }
+        }
+
+        // 显示 AI 智能信息
+        val aiStats = remember { mutableStateOf(aiPlayer.getAIStats()) }
+
+        LaunchedEffect(aiPlayer.historicalData.size) {
+            aiStats.value = aiPlayer.getAIStats()
+        }*/
+
+        // 每轮开始前预测 AI 点击时间
+        LaunchedEffect(currentTargetIndex, timerState) {
+            if (timerState == TimerState.RUNNING && !gameFinished) {
+                val targetTime = expectedTimes[currentTargetIndex]
+                aiPredictedTiming = aiPlayer.calculateAITiming(targetTime, currentTime)
+            }
+        }
+
+        // 监控 AI 点击时机
+        LaunchedEffect(currentTime, timerState, currentTargetIndex) {
+            if (timerState == TimerState.RUNNING &&
+                !gameFinished &&
+                aiActualTimes.size == currentTargetIndex &&
+                currentTime >= aiPredictedTiming
+            ) {
+
+                // AI 点击
+                aiActualTimes.add(currentTime)
+                val targetTime = expectedTimes[currentTargetIndex]
+                val aiError = abs(currentTime - targetTime)
+                aiTotalError += aiError
+
+                // 显示 AI 结果
+                currentRoundResult = "AI 已完成，误差：$aiError MS"
             }
         }
 
@@ -135,7 +197,7 @@ class ClassicPracticeActivity : ComponentActivity() {
             }
         }*/
 
-        // 处理玩家暂停事件（计算误差）
+        /*// 处理玩家暂停事件（计算误差）
         LaunchedEffect(timerState) {
             if (timerState == TimerState.PAUSED && !gameFinished) {
                 // 记录玩家时间
@@ -182,6 +244,53 @@ class ClassicPracticeActivity : ComponentActivity() {
                     }
                 }
             }
+        }*/
+
+        // 处理玩家暂停事件
+        LaunchedEffect(timerState) {
+            if (timerState == TimerState.PAUSED && !gameFinished) {
+                // 记录玩家时间
+                playerActualTimes.add(currentTime)
+                val targetTime = expectedTimes[currentTargetIndex]
+                val playerError = abs(currentTime - targetTime)
+                playerTotalError += playerError
+
+                // 获取 AI 本轮时间
+                val aiTime = if (aiActualTimes.size > currentTargetIndex) {
+                    aiActualTimes[currentTargetIndex]
+                } else {
+                    // AI 未点击，使用目标时间+惩罚
+                    targetTime + 1000L
+                }
+
+                // AI 学习
+                aiPlayer.learnFromRound(targetTime, currentTime, aiTime)
+
+                // 计算 AI 误差
+                val aiError = abs(aiTime - targetTime)
+
+                // 显示本轮结果
+                currentRoundResult = when {
+                    playerError < aiError -> "本轮你赢了！（$playerError VS $aiError MS）"
+                    playerError > aiError -> "本轮 AI 赢了！（$playerError VS $aiError MS）"
+                    else -> "本轮平局！（$playerError MS）"
+                }
+
+                XToast.showText("玩家误差：${playerError} MS")
+
+                // 移动到下一个时间点或结束游戏
+                if (currentTargetIndex < expectedTimes.size - 1) {
+                    currentTargetIndex++
+                    currentRoundResult = ""
+                } else {
+                    gameFinished = true
+                    currentRoundResult = when {
+                        playerTotalError < aiTotalError -> "你获胜！"
+                        playerTotalError > aiTotalError -> "AI 获胜！"
+                        else -> "平局！"
+                    }
+                }
+            }
         }
 
         // 处理重置事件
@@ -201,6 +310,7 @@ class ClassicPracticeActivity : ComponentActivity() {
             aiActualTimes.clear()
             currentRoundResult = ""
             gameFinished = false
+            // aiPlayer.reset() // 重置 AI 学习状态
         }
 
         // 处理开始 / 暂停事件
@@ -210,7 +320,7 @@ class ClassicPracticeActivity : ComponentActivity() {
             }
         }
 
-        XCard.LivelyCard {
+        XCard.Lively {
             Spacer(modifier = Modifier.height(10.dp))
 
             /*Row(
@@ -231,15 +341,7 @@ class ClassicPracticeActivity : ComponentActivity() {
             )
             // }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 0.5f.dp,
-                color = BorderColor.DEFAULT_GRAY
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
+            XDivider.Horizontal(space = 10.dp)
 
             StopWatchComponent(
                 state = timerState,
@@ -250,20 +352,12 @@ class ClassicPracticeActivity : ComponentActivity() {
                 startButtonEnabled = !gameFinished,
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 0.5f.dp,
-                color = BorderColor.DEFAULT_GRAY
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
+            XDivider.Horizontal(10.dp)
 
             Text(
                 text = "玩家总误差：${playerTotalError} MS",
                 fontSize = 16.sp,
-                color = if (playerTotalError < 500) ContentColor.DEFAULT_GREEN else ContentColor.DEFAULT_RED,
+                color = if (playerTotalError < 500) XContentColor.GREEN else XContentColor.RED,
                 modifier = Modifier.clickVfx {
                     val intent =
                         Intent(this@ClassicPracticeActivity, ErrorDetailsActivity::class.java)
@@ -275,20 +369,12 @@ class ClassicPracticeActivity : ComponentActivity() {
                 }
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 0.5f.dp,
-                color = BorderColor.DEFAULT_GRAY
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
+            XDivider.Horizontal(10.dp)
 
             Text(
                 text = "AI 总误差：${aiTotalError} MS",
                 fontSize = 16.sp,
-                color = if (aiTotalError < playerTotalError) ContentColor.DEFAULT_GREEN else ContentColor.DEFAULT_RED,
+                color = if (aiTotalError < playerTotalError) XContentColor.GREEN else XContentColor.RED,
             )
 
             Text(
@@ -304,20 +390,19 @@ class ClassicPracticeActivity : ComponentActivity() {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 0.5f.dp,
-                    color = BorderColor.DEFAULT_GRAY
+                    color = XBorderColor.GRAY
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
                     text = currentRoundResult,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     color = when {
-                        currentRoundResult.contains("你赢了") -> ContentColor.DEFAULT_GREEN
-                        currentRoundResult.contains("AI 赢了") -> ContentColor.DEFAULT_RED
+                        currentRoundResult.contains("你获胜") -> XContentColor.GREEN
+                        currentRoundResult.contains("AI 获胜") -> XContentColor.RED
                         else -> Color.Gray
                     },
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
@@ -326,6 +411,79 @@ class ClassicPracticeActivity : ComponentActivity() {
             Spacer(modifier = Modifier.height(10.dp))
         }
 
+        /*// AI 智能信息面板
+        AIIntelligencePanel(
+            aiStats = aiStats.value,
+            learningProgress = aiPlayer.getAILearningProgress()
+        )*/
+
         Spacer(modifier = Modifier.height(50.dp))
     }
 }
+
+/*
+// AI 智能信息面板组件
+@Composable
+fun AIIntelligencePanel(aiStats: IntelligentTimingAI.AIStats, learningProgress: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "🤖 AI 智能分析",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("学习阶段:", fontWeight = FontWeight.Medium)
+                Text(learningProgress, color = getLearningColor(learningProgress))
+            }
+
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("对战轮次：")
+                Text("${aiStats.totalRounds} 轮")
+            }
+
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("AI 平均误差：")
+                Text("${"%.1f".format(aiStats.averageError)} MS")
+            }
+
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("AI 胜率：")
+                Text("${"%.1f".format(aiStats.winRate)}%")
+            }
+
+            // 难度可视化
+            Text("AI 难度：Lv.${aiStats.currentDifficulty}")
+            LinearProgressIndicator(
+                progress = aiStats.currentDifficulty / 10f,
+                modifier = Modifier.fillMaxWidth(),
+                color = when {
+                    aiStats.currentDifficulty >= 8 -> Color.Red
+                    aiStats.currentDifficulty >= 5 -> Color.Yellow
+                    else -> Color.Green
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun getLearningColor(progress: String): Color {
+    return when (progress) {
+        "新手学习" -> Color.Gray
+        "进阶适应" -> Color.Blue
+        "高手模式" -> Color.Magenta
+        "大师级 AI" -> Color.Red
+        else -> Color.Black
+    }
+}*/

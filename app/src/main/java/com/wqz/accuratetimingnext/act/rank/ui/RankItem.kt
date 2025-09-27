@@ -30,8 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
 
 /**
  * 排行榜列表项
@@ -160,7 +160,7 @@ fun RankItem(
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             maxLines = 1,
-                            color = ThemeColor
+                            color = XThemeColor.NORMAL
                         )
                     }
                 }
@@ -183,7 +183,7 @@ fun RankItem(
                     modifier = Modifier
                         .wrapContentWidth()
                         .background(
-                            color = ThemeColor,
+                            color = XThemeColor.NORMAL,
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 10.dp)

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.game.viewmodel.TimerState
-import com.wqz.accuratetimingnext.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
 
 /**
  * 停止计时器组件

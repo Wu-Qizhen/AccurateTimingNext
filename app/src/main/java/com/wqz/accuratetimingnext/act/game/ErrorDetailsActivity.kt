@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,11 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
 import kotlin.math.abs
 
 /**
@@ -43,7 +41,7 @@ class ErrorDetailsActivity : ComponentActivity() {
         val playerId = intent.getIntExtra("PLAYER_ID", -1)
 
         setContent {
-            XBackground.BreathingBackground("误差详情") {
+            XBackground.Breathing("误差详情") {
                 ErrorDetailsScreen(
                     expectedTimes = expectedTimes,
                     actualTimes = actualTimes,
@@ -63,7 +61,7 @@ class ErrorDetailsActivity : ComponentActivity() {
             abs(actualTime - expectedTimes[index])
         }
 
-        XCard.LivelyCard {
+        XCard.Lively {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -104,12 +102,7 @@ class ErrorDetailsActivity : ComponentActivity() {
 
             // Spacer(modifier = Modifier.height(10.dp))
 
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                thickness = BorderWidth.DEFAULT_WIDTH,
-                color = BorderColor.DEFAULT_GRAY
-            )
+            XDivider.Horizontal()
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -124,12 +117,7 @@ class ErrorDetailsActivity : ComponentActivity() {
             if (playerId != -1) {
                 Spacer(modifier = Modifier.height(10.dp))
 
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    thickness = BorderWidth.DEFAULT_WIDTH,
-                    color = BorderColor.DEFAULT_GRAY
-                )
+                XDivider.Horizontal()
 
                 // Spacer(modifier = Modifier.height(10.dp))
 
@@ -149,7 +137,7 @@ class ErrorDetailsActivity : ComponentActivity() {
                         modifier = Modifier
                             .wrapContentWidth()
                             .background(
-                                color = ThemeColor,
+                                color = XThemeColor.NORMAL,
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .padding(horizontal = 10.dp)

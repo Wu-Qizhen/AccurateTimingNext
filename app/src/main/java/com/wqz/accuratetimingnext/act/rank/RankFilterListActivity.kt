@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -46,12 +45,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.rank.ui.RankItem
 import com.wqz.accuratetimingnext.act.rank.util.Sort
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -71,7 +69,7 @@ class RankFilterListActivity : ComponentActivity() {
         sort = if (sort == "") Sort.NUMBER_OF_GAME.name else sort
 
         setContent {
-            XBackground.BreathingBackground(titleId = R.string.ranking_list) {
+            XBackground.Breathing(titleId = R.string.ranking_list) {
                 RankListScreen()
             }
         }
@@ -144,7 +142,7 @@ class RankFilterListActivity : ComponentActivity() {
             Column {
                 Spacer(modifier = Modifier.height(10.dp))
 
-                XCard.LivelyCard(
+                XCard.Lively(
                     10
                 ) {
                     Row(
@@ -223,7 +221,7 @@ class RankFilterListActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     Box(
                         modifier = Modifier
                             .wrapContentHeight()
@@ -271,12 +269,7 @@ class RankFilterListActivity : ComponentActivity() {
                         )
                     }
 
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
+                    XDivider.Horizontal()
 
                     players.sortedByDescending { player ->
                         when (sort) {
@@ -301,12 +294,7 @@ class RankFilterListActivity : ComponentActivity() {
                                 )
 
                                 if (player != players.last()) {
-                                    HorizontalDivider(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        thickness = BorderWidth.DEFAULT_WIDTH,
-                                        color = BorderColor.DEFAULT_GRAY
-                                    )
+                                    XDivider.Horizontal()
                                 }
                             }
                         }

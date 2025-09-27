@@ -27,9 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XTitleBar
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBar
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
 
 /**
  * 关于开发者
@@ -45,7 +45,7 @@ class AboutDeveloperActivity : ComponentActivity() {
             intent.getIntExtra("description", R.string.wqz_desc)
         val details = intent.getIntExtra("details", R.string.text_about_wqz)
         setContent {
-            XBackground.BreathingBackground {
+            XBackground.Breathing {
                 AboutDeveloperScreen(
                     logo = logo,
                     name = name,
@@ -68,9 +68,9 @@ class AboutDeveloperActivity : ComponentActivity() {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            XTitleBar.TextTitleBar(title = R.string.about_developer)
+            XBar.Text(title = R.string.about_developer)
 
-            XCard.LivelyCard(10) {
+            XCard.Lively(10) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()

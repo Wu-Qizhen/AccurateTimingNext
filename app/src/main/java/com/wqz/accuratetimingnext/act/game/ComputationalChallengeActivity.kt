@@ -35,13 +35,13 @@ import com.wqz.accuratetimingnext.act.game.util.Mode
 import com.wqz.accuratetimingnext.act.game.util.ModeTranslator
 import com.wqz.accuratetimingnext.act.game.viewmodel.StopWatchViewModel
 import com.wqz.accuratetimingnext.act.game.viewmodel.TimerState
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XBorderColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XContentColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.database.entity.GameRecord
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.ContentColor
 import com.wqz.accuratetimingnext.viewmodel.GameRecordViewModel
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
@@ -65,7 +65,7 @@ class ComputationalChallengeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(
+            XBackground.Breathing(
                 titleId = R.string.computational_challenge
             ) {
                 CompositionLocalProvider(LocalLifecycleOwner provides this) {
@@ -249,7 +249,7 @@ class ComputationalChallengeActivity : ComponentActivity() {
             }
         }
 
-        XCard.LivelyCard {
+        XCard.Lively {
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
@@ -269,7 +269,7 @@ class ComputationalChallengeActivity : ComponentActivity() {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 0.5f.dp,
-                color = BorderColor.DEFAULT_GRAY
+                color = XBorderColor.GRAY
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -288,7 +288,7 @@ class ComputationalChallengeActivity : ComponentActivity() {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 0.5f.dp,
-                color = BorderColor.DEFAULT_GRAY
+                color = XBorderColor.GRAY
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -297,7 +297,7 @@ class ComputationalChallengeActivity : ComponentActivity() {
                 text = "总误差：${totalError} MS",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (totalError < 500) ContentColor.DEFAULT_GREEN else ContentColor.DEFAULT_RED,
+                color = if (totalError < 500) XContentColor.GREEN else XContentColor.RED,
                 modifier = Modifier.clickVfx {
                     val intent =
                         Intent(

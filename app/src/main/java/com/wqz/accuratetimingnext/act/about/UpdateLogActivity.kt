@@ -39,11 +39,11 @@ import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.about.data.UpdateLog
 import com.wqz.accuratetimingnext.act.about.data.UpdateLogData
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.color.BackgroundColor
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XBackgroundColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XBorderColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.property.XWidth
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
 
 /**
  * 更新日志
@@ -55,7 +55,7 @@ class UpdateLogActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(titleId = R.string.update_log) {
+            XBackground.Breathing(titleId = R.string.update_log) {
                 UpdateLogScreen(
                     updateLogs = UpdateLogData.updateLogs
                 )
@@ -83,9 +83,9 @@ class UpdateLogActivity : ComponentActivity() {
         val interactionSource = remember { MutableInteractionSource() }
         val isPressed = interactionSource.collectIsPressedAsState()
         val backgroundColor =
-            if (isPressed.value) BackgroundColor.PRESSED_GRAY else BackgroundColor.DEFAULT_GRAY
-        val borderColors = BorderColor.DEFAULT_GRADIENT_GRAY
-        val borderWidth = BorderWidth.DEFAULT_WIDTH
+            if (isPressed.value) XBackgroundColor.GRAY_PRESSED else XBackgroundColor.GRAY
+        val borderColors = XBorderColor.GRAY_GRADIENT
+        val borderWidth = XWidth.BORDER_M
         var showDetails by remember { mutableStateOf(false) }
 
         Column {

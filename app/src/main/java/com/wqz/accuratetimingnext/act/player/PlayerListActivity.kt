@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,14 +37,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
 import com.wqz.accuratetimingnext.database.entity.Player
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,7 +59,7 @@ class PlayerListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(title = "玩家管理") {
+            XBackground.Breathing(title = "玩家管理") {
                 PlayerListScreen()
             }
         }
@@ -92,19 +90,14 @@ class PlayerListActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     players.forEach {
                         key(it.id) {
                             PlayerItem(
                                 player = it
                             )
                             if (it != players.last()) {
-                                HorizontalDivider(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    thickness = BorderWidth.DEFAULT_WIDTH,
-                                    color = BorderColor.DEFAULT_GRAY
-                                )
+                                XDivider.Horizontal()
                             }
                         }
                     }
@@ -168,7 +161,7 @@ class PlayerListActivity : ComponentActivity() {
                         modifier = Modifier
                             .wrapContentWidth()
                             .background(
-                                color = ThemeColor,
+                                color = XThemeColor.NORMAL,
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .padding(horizontal = 10.dp)

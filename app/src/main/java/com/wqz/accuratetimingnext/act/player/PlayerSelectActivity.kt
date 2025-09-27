@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,15 +45,14 @@ import com.wqz.accuratetimingnext.act.game.MemoryChallengeActivity
 import com.wqz.accuratetimingnext.act.game.RaceRecordActivity
 import com.wqz.accuratetimingnext.act.game.ReverseChallengeActivity
 import com.wqz.accuratetimingnext.act.game.util.Mode
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.database.entity.Player
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -87,7 +85,7 @@ class PlayerSelectActivity : ComponentActivity() {
         }
 
         setContent {
-            XBackground.BreathingBackground(title = "选择玩家") {
+            XBackground.Breathing(title = "选择玩家") {
                 PlayerSelectScreen(
                     timeName = timeName
                 )
@@ -106,7 +104,7 @@ class PlayerSelectActivity : ComponentActivity() {
                 .clickVfx()
                 .wrapContentWidth()
                 .background(
-                    color = ThemeColor,
+                    color = XThemeColor.NORMAL,
                     shape = RoundedCornerShape(20.dp)
                 )
                 .padding(horizontal = 10.dp)
@@ -143,19 +141,14 @@ class PlayerSelectActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     players.forEach {
                         key(it.id) {
                             PlayerItem(
                                 player = it
                             )
                             if (it != players.last()) {
-                                HorizontalDivider(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    thickness = BorderWidth.DEFAULT_WIDTH,
-                                    color = BorderColor.DEFAULT_GRAY
-                                )
+                                XDivider.Horizontal()
                             }
                         }
                     }
@@ -251,7 +244,7 @@ class PlayerSelectActivity : ComponentActivity() {
                         modifier = Modifier
                             .wrapContentWidth()
                             .background(
-                                color = ThemeColor,
+                                color = XThemeColor.NORMAL,
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .padding(horizontal = 10.dp)

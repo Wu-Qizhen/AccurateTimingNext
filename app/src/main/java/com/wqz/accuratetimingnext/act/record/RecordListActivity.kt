@@ -30,7 +30,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -54,16 +53,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XTextFieldColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.database.entity.GameRecord
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.TextFieldColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import com.wqz.accuratetimingnext.viewmodel.GameRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -83,7 +81,7 @@ class RecordListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(titleId = R.string.game_record) {
+            XBackground.Breathing(titleId = R.string.game_record) {
                 RecordListScreen()
             }
         }
@@ -156,18 +154,13 @@ class RecordListActivity : ComponentActivity() {
             }
 
             else -> {
-                XCard.SurfaceCard {
+                XCard.Surface {
                     monthlyRecords.forEach { record ->
                         key(record.id) {
                             RecordItem(record)
 
                             if (record != monthlyRecords.last()) {
-                                HorizontalDivider(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    thickness = BorderWidth.DEFAULT_WIDTH,
-                                    color = BorderColor.DEFAULT_GRAY
-                                )
+                                XDivider.Horizontal()
                             }
                         }
                     }
@@ -253,12 +246,12 @@ class RecordListActivity : ComponentActivity() {
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    XCard.LivelyCard {
+                    XCard.Lively {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = inputMonth,
                             onValueChange = { inputMonth = it },
-                            colors = TextFieldColor.colors(),
+                            colors = XTextFieldColor.textFieldSurface(),
                             textStyle = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -484,7 +477,7 @@ class RecordListActivity : ComponentActivity() {
                     modifier = Modifier
                         .wrapContentWidth()
                         .background(
-                            color = ThemeColor,
+                            color = XThemeColor.NORMAL,
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 5.dp),

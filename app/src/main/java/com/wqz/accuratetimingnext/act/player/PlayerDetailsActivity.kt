@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -43,16 +42,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.player.util.PlayerValidator
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XButtonColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XTextFieldColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.database.entity.Player
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.TextFieldColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.property.ButtonCategory
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,7 +68,7 @@ class PlayerDetailsActivity : ComponentActivity() {
         val playerId = intent.getIntExtra("PLAYER_ID", -1)
 
         setContent {
-            XBackground.BreathingBackground(title = "玩家详情") {
+            XBackground.Breathing(title = "玩家详情") {
                 PlayerDetailsScreen(
                     playerId = playerId
                 )
@@ -117,12 +115,12 @@ class PlayerDetailsActivity : ComponentActivity() {
 
                 var deleteConfirm by remember { mutableIntStateOf(0) }
 
-                XCard.LivelyCard {
+                XCard.Lively {
                     TextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = playerName,
                         onValueChange = { playerName = it },
-                        colors = TextFieldColor.colors(),
+                        colors = XTextFieldColor.textFieldSurface(),
                         textStyle = TextStyle(
                             color = Color.White,
                             fontSize = 16.sp,
@@ -137,10 +135,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                         maxLines = 1
                     )
 
-                    HorizontalDivider(
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
+                    XDivider.Horizontal()
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -160,7 +155,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .background(
-                                    color = ThemeColor,
+                                    color = XThemeColor.NORMAL,
                                     shape = RoundedCornerShape(20.dp)
                                 )
                                 .padding(horizontal = 10.dp)
@@ -204,14 +199,8 @@ class PlayerDetailsActivity : ComponentActivity() {
                             maxLines = 1
                         )
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
 
-                    HorizontalDivider(
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
+                    XDivider.Horizontal(space = 10.dp)
 
                     Row(
                         modifier = Modifier
@@ -222,7 +211,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                         Text(
                             text = "时数\n4\n5\n6\n7\n8\n9\n10",
                             fontWeight = FontWeight.Bold,
-                            color = ThemeColor,
+                            color = XThemeColor.NORMAL,
                             textAlign = TextAlign.Center
                         )
 
@@ -230,7 +219,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                             Text(
                                 text = "最佳",
                                 fontWeight = FontWeight.Bold,
-                                color = ThemeColor,
+                                color = XThemeColor.NORMAL,
                                 maxLines = 1
                             )
 
@@ -245,7 +234,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                             Text(
                                 text = "↑Avg",
                                 fontWeight = FontWeight.Bold,
-                                color = ThemeColor,
+                                color = XThemeColor.NORMAL,
                                 maxLines = 1
                             )
 
@@ -260,7 +249,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                             Text(
                                 text = "↓Avg",
                                 fontWeight = FontWeight.Bold,
-                                color = ThemeColor,
+                                color = XThemeColor.NORMAL,
                                 maxLines = 1
                             )
 
@@ -284,7 +273,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                     XItem.Button(
                         icon = R.drawable.ic_delete,
                         text = stringResource(id = R.string.delete),
-                        color = ButtonCategory.WARNING_BUTTON
+                        color = XButtonColor.WARNING
                     ) {
                         deleteConfirm++
                         if (deleteConfirm > 2) {
@@ -304,7 +293,7 @@ class PlayerDetailsActivity : ComponentActivity() {
                     XItem.Button(
                         icon = R.drawable.ic_confirm,
                         text = stringResource(id = R.string.save),
-                        color = ButtonCategory.SAFE_BUTTON
+                        color = XButtonColor.SAFE
                     ) {
                         val name = playerName.trim().replace("\n", "")
                         // val expectedPlayers = parseAndConvertPlayers(players)

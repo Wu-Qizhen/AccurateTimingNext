@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -32,14 +31,13 @@ import androidx.compose.ui.unit.sp
 import com.wqz.accuratetimingnext.R
 import com.wqz.accuratetimingnext.act.time.util.RandomUniqueTimeGenerator
 import com.wqz.accuratetimingnext.act.time.util.TimeConverters.parseAndConvertTimes
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.TextFieldColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XTextFieldColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,7 +53,7 @@ class TimeAddActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(title = "添加时间") {
+            XBackground.Breathing(title = "添加时间") {
                 TimeAddScreen()
             }
         }
@@ -68,12 +66,12 @@ class TimeAddActivity : ComponentActivity() {
         var timeName by remember { mutableStateOf("") }
         var count by remember { mutableStateOf("") }
 
-        XCard.LivelyCard {
+        XCard.Lively {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = timeName,
                 onValueChange = { timeName = it },
-                colors = TextFieldColor.colors(),
+                colors = XTextFieldColor.textFieldSurface(),
                 textStyle = TextStyle(
                     color = Color.White,
                     fontSize = 16.sp,
@@ -88,16 +86,13 @@ class TimeAddActivity : ComponentActivity() {
                 maxLines = 1
             )
 
-            HorizontalDivider(
-                thickness = BorderWidth.DEFAULT_WIDTH,
-                color = BorderColor.DEFAULT_GRAY
-            )
+            XDivider.Horizontal()
 
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = times,
                 onValueChange = { times = it },
-                colors = TextFieldColor.colors(),
+                colors = XTextFieldColor.textFieldSurface(),
                 textStyle = TextStyle(
                     color = Color.White,
                     fontSize = 16.sp,
@@ -111,16 +106,13 @@ class TimeAddActivity : ComponentActivity() {
                 }
             )
 
-            HorizontalDivider(
-                thickness = BorderWidth.DEFAULT_WIDTH,
-                color = BorderColor.DEFAULT_GRAY
-            )
+            XDivider.Horizontal()
 
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = count,
                 onValueChange = { count = it },
-                colors = TextFieldColor.colors(),
+                colors = XTextFieldColor.textFieldSurface(),
                 textStyle = TextStyle(
                     color = Color.White,
                     fontSize = 16.sp,
@@ -138,10 +130,7 @@ class TimeAddActivity : ComponentActivity() {
                 )
             )
 
-            HorizontalDivider(
-                thickness = BorderWidth.DEFAULT_WIDTH,
-                color = BorderColor.DEFAULT_GRAY
-            )
+            XDivider.Horizontal()
 
             Column(
                 modifier = Modifier.padding(15.dp)
@@ -165,7 +154,7 @@ class TimeAddActivity : ComponentActivity() {
                 Text(
                     text = "* 创建后仅可更改名称",
                     fontSize = 12.sp,
-                    color = ThemeColor,
+                    color = XThemeColor.NORMAL,
                     maxLines = 1
                 )
             }

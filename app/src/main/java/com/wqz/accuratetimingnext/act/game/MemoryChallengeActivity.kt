@@ -7,10 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -36,14 +34,14 @@ import com.wqz.accuratetimingnext.act.game.util.Mode
 import com.wqz.accuratetimingnext.act.game.util.ModeTranslator
 import com.wqz.accuratetimingnext.act.game.viewmodel.StopWatchViewModel
 import com.wqz.accuratetimingnext.act.game.viewmodel.TimerState
+import com.wqz.accuratetimingnext.aethex.matrix.animation.XActivateVfx.clickVfx
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XContentColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XItem
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.database.entity.GameRecord
-import com.wqz.accuratetimingnext.ui.ModifierExtends.clickVfx
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XItem
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.color.ContentColor
 import com.wqz.accuratetimingnext.viewmodel.GameRecordViewModel
 import com.wqz.accuratetimingnext.viewmodel.PlayerViewModel
 import com.wqz.accuratetimingnext.viewmodel.TimeViewModel
@@ -67,7 +65,7 @@ class MemoryChallengeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            XBackground.BreathingBackground(
+            XBackground.Breathing(
                 titleId = R.string.memory_challenge
             ) {
                 CompositionLocalProvider(LocalLifecycleOwner provides this) {
@@ -92,7 +90,7 @@ class MemoryChallengeActivity : ComponentActivity() {
 
     @Composable
     fun MemoryScreen(expectedTimes: List<Long>, onSkip: () -> Unit) {
-        XCard.LivelyCard(10) {
+        XCard.Lively(10) {
             Text(
                 text = "十秒内记忆时间点：",
                 fontSize = 16.sp,
@@ -284,7 +282,7 @@ class MemoryChallengeActivity : ComponentActivity() {
             }
         }
 
-        XCard.LivelyCard {
+        XCard.Lively {
             Spacer(modifier = Modifier.height(10.dp))
 
             StopWatchComponent(
@@ -296,21 +294,13 @@ class MemoryChallengeActivity : ComponentActivity() {
                 startButtonEnabled = !gameFinished,
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 0.5f.dp,
-                color = BorderColor.DEFAULT_GRAY
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
+            XDivider.Horizontal(space = 10.dp)
 
             Text(
                 text = "总误差：${totalError} MS",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (totalError < 500) ContentColor.DEFAULT_GREEN else ContentColor.DEFAULT_RED,
+                color = if (totalError < 500) XContentColor.GREEN else XContentColor.RED,
                 modifier = Modifier.clickVfx {
                     val intent =
                         Intent(this@MemoryChallengeActivity, ErrorDetailsActivity::class.java)

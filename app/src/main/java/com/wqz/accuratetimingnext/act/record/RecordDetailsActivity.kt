@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,12 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wqz.accuratetimingnext.R
-import com.wqz.accuratetimingnext.ui.XBackground
-import com.wqz.accuratetimingnext.ui.XCard
-import com.wqz.accuratetimingnext.ui.XToast
-import com.wqz.accuratetimingnext.ui.color.BorderColor
-import com.wqz.accuratetimingnext.ui.property.BorderWidth
-import com.wqz.accuratetimingnext.ui.theme.ThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.foundation.color.XThemeColor
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XBackground
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XCard
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XDivider
+import com.wqz.accuratetimingnext.aethex.matrix.ui.XToast
 import com.wqz.accuratetimingnext.viewmodel.GameRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
@@ -58,7 +56,7 @@ class RecordDetailsActivity : ComponentActivity() {
         val recordId = intent.getIntExtra("RECORD_ID", -1)
 
         setContent {
-            XBackground.BreathingBackground(title = "玩家详情") {
+            XBackground.Breathing(title = "玩家详情") {
                 RecordDetailsScreen(
                     recordId = recordId
                 )
@@ -98,7 +96,7 @@ class RecordDetailsActivity : ComponentActivity() {
             else -> {
                 val currentRecord = record!!
 
-                XCard.LivelyCard {
+                XCard.Lively {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -119,7 +117,7 @@ class RecordDetailsActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .wrapContentWidth()
                                     .background(
-                                        color = ThemeColor,
+                                        color = XThemeColor.NORMAL,
                                         shape = RoundedCornerShape(20.dp)
                                     )
                                     .padding(horizontal = 10.dp)
@@ -234,10 +232,7 @@ class RecordDetailsActivity : ComponentActivity() {
                         DataBar(title = "总误差", data = "${currentRecord.totalError} MS")
                     }
 
-                    HorizontalDivider(
-                        thickness = BorderWidth.DEFAULT_WIDTH,
-                        color = BorderColor.DEFAULT_GRAY
-                    )
+                    XDivider.Horizontal()
 
                     ErrorDetailsComponent(
                         expectedTimes = currentRecord.expectedTimes,
@@ -286,7 +281,7 @@ class RecordDetailsActivity : ComponentActivity() {
                     modifier = Modifier
                         .wrapContentWidth()
                         .background(
-                            color = ThemeColor,
+                            color = XThemeColor.NORMAL,
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 10.dp)
@@ -377,12 +372,7 @@ class RecordDetailsActivity : ComponentActivity() {
             }
         }
 
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth(),
-            thickness = BorderWidth.DEFAULT_WIDTH,
-            color = BorderColor.DEFAULT_GRAY
-        )
+        XDivider.Horizontal()
 
         Spacer(modifier = Modifier.height(10.dp))
 
