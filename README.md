@@ -1,7 +1,6 @@
-# 精准时刻（重构版）
+# Accurate Timing (Refactored) | 精准时刻（重构版）
 
-## 预览
-直接看图吧 (●'◡'●)
+## Preview | 预览
 
 ![输入图片说明](preview/Screenshot_20250927_232125_accuratetimingnext.png)
 
